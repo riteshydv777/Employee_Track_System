@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="ISO-8859-1">
+  <title>Employee Management System</title>
+  <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css"/>
+</head>
+<body>
+<div class="container">
+  <h2>Employee Management System</h2>
+  <div th:if="${employees != null}">
+    <a class="btn btn-primary mb-3" th:href="@{/showNewEmployeeForm}">Add Employee</a>
+    <table class="table table-bordered">
+      <thead>
+      <tr>
+        <th th:click="|@{/page/1(sortField='firstName',sortDir=${reverseSortDir})}|">First Name</th>
+        <th th:click="|@{/page/1(sortField='lastName',sortDir=${reverseSortDir})}|">Last Name</th>
+        <th th:click="|@{/page/1(sortField='email',sortDir=${reverseSortDir})}|">Email</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="employee : ${listEmployees}">
+        <td th:text="${employee.firstName}">First Name</td>
+        <td th:text="${employee.lastName}">Last Name</td>
+        <td th:text="${employee.email}">Email</td>
+        <td>
+          <a th:href="@{/showFormForUpdate/{id}(id=${employee.id})}">Edit</a> |
+          <a th:href="@{/deleteEmployee/{id}(id=${employee.id})}">Delete</a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div>
+    <ul class="pagination">
+      <li th:if="${currentPage > 1}">
+        <a class="page-link" th:href="@{/page/{pageNo}(pageNo=${currentPage - 1})}">Previous</a>
+      </li>
+      <li th:each="i : ${#numbers.sequence(1, totalPages)}"
+          th:classappend="${i == currentPage} ? 'active'">
+        <a class="page-link" th:href="@{/page/{pageNo}(pageNo=${i})}" th:text="${i}">1</a>
+      </li>
+      <li th:if="${currentPage < totalPages}">
+        <a class="page-link" th:href="@{/page/{pageNo}(pageNo=${currentPage + 1})}">Next</a>
+      </li>
+    </ul>
+  </div>
+</div>
+</body>
+</html>
